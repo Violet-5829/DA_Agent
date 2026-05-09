@@ -6,7 +6,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from langchain_core.messages import AIMessage, HumanMessage
 from sqlalchemy import text
@@ -76,9 +76,12 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="数据分析 Agent",
-    description="基于自然语言的 MySQL 数据分析接口",
-    version="0.1.0",
+    description="基于自然语言的 MySQL 数据分析接口——用中文提问，Agent 自动查询数据库、生成图表、总结结论",
+    version="1.0.0",
     lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
+    swagger_ui_oauth2_redirect_url=None,
 )
 
 app.add_middleware(
@@ -92,11 +95,55 @@ app.add_middleware(RequestIDMiddleware)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
+SWAGGER_HTML = """<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="{favicon_url}">
+    <link rel="stylesheet" href="/static/swagger-ui-base.css">
+    <link rel="stylesheet" href="/static/swagger-custom.css">
+</head>
+<body>
+    <div id="swagger-ui"></div>
+    <script src="/static/swagger-ui-bundle.js"></script>
+    <script>
+    SwaggerUIBundle({{
+        url: "{openapi_url}",
+        dom_id: "#swagger-ui",
+        presets: [SwaggerUIBundle.presets.apis],
+        layout: "BaseLayout",
+        deepLinking: true,
+        defaultModelsExpandDepth: 1,
+        defaultModelExpandDepth: 1,
+        docExpansion: "list",
+        filter: true,
+        showExtensions: true,
+        showCommonExtensions: true,
+        tryItOutEnabled: true,
+    }})
+    </script>
+</body>
+</html>"""
+
+
+@app.get("/docs", include_in_schema=False)
+async def custom_swagger_ui():
+    """自定义 Swagger UI 文档页面。"""
+    return HTMLResponse(
+        SWAGGER_HTML.format(
+            title=f"{app.title} - API 文档",
+            openapi_url=app.openapi_url or "/openapi.json",
+            favicon_url="/static/favicon.ico",
+        )
+    )
+
+
 @app.get("/")
 async def root():
-    """重定向到 Swagger 文档页。"""
-    from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/docs")
+    """返回聊天界面主页。"""
+    return FileResponse("static/index.html")
 
 
 @app.get("/health", response_model=HealthResponse)

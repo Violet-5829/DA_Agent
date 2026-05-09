@@ -1,0 +1,106 @@
+/* 1. 极其重要：必须先引入官方基础样式，否则布局会彻底崩塌（就是你截图里的样子） */
+@import url('https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css');
+
+/* 2. 引入现代化无衬线字体 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* --- 全局与背景 --- */
+body {
+    background-color: #f8fafc; /* 高级浅灰白背景 */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b;
+}
+
+/* 隐藏顶部难看的绿色原生 Topbar */
+.swagger-ui .topbar {
+    display: none !important;
+}
+
+/* --- 容器居中与宽度适配 --- */
+.swagger-ui .wrapper {
+    max-width: 1000px; /* 限制最大宽度，阅读更舒适 */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- 标题与信息区域优化 --- */
+.swagger-ui .info {
+    margin: 40px 0 30px 0;
+    background: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #e2e8f0;
+}
+.swagger-ui .info .title {
+    color: #0f172a;
+    font-weight: 700;
+}
+.swagger-ui .info a {
+    color: #2563eb; /* 科技蓝 */
+    transition: color 0.2s;
+}
+.swagger-ui .info a:hover {
+    color: #1d4ed8;
+}
+
+/* --- API 端点卡片大修 (核心悬浮质感) --- */
+.swagger-ui .opblock {
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+    transition: all 0.2s ease-in-out;
+    margin-bottom: 16px;
+    background: #ffffff;
+    overflow: hidden;
+}
+/* 鼠标悬浮时的上浮与阴影效果 */
+.swagger-ui .opblock:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    border-color: #cbd5e1;
+}
+
+/* GET 方法定制 */
+.swagger-ui .opblock.opblock-get {
+    background: #fbfdff;
+    border-color: #bfdbfe;
+}
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+    background-color: #2563eb; /* 深蓝按钮 */
+    border-radius: 6px;
+    font-weight: 600;
+}
+.swagger-ui .opblock.opblock-get .opblock-summary {
+    border-bottom: 1px solid transparent;
+}
+.swagger-ui .opblock.opblock-get.is-open .opblock-summary {
+    border-bottom-color: #e0f2fe;
+}
+
+/* POST 方法定制 */
+.swagger-ui .opblock.opblock-post {
+    background: #fcfdfd;
+    border-color: #bbf7d0;
+}
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+    background-color: #059669; /* 翡翠绿按钮 */
+    border-radius: 6px;
+    font-weight: 600;
+}
+.swagger-ui .opblock.opblock-post.is-open .opblock-summary {
+    border-bottom-color: #dcfce7;
+}
+
+/* --- Schemas (数据模型) 区域美化 --- */
+.swagger-ui section.models {
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+}
+.swagger-ui section.models h4 {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 15px;
+}

@@ -9,4 +9,6 @@ static/*.png
 .ipynb_checkpoints/
 .vscode/
 .idea/
+.claude/
 dist/
+要求

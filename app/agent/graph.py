@@ -83,6 +83,11 @@ async def analyze_node(state: AgentState) -> AgentState:
         _trace(state, "clarify", {"question": state["answer"]})
         return state
 
+    if intent == "summarize" and not parsed.get("sql"):
+        state["answer"] = parsed.get("answer", "抱歉，我暂时无法回答这个问题。")
+        _trace(state, "summarize", {"answer": state["answer"][:200]})
+        return state
+
     state["sql"] = parsed.get("sql")
     state["chart_type"] = parsed.get("chart_type")
     state["chart_config"] = parsed.get("chart_config")
